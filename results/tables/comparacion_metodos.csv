@@ -1,0 +1,3 @@
+Método,Accuracy,F1-score
+Imputación por Media,0.6098,0.0
+Imputación KNN,0.6098,0.0
