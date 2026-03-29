@@ -1,1 +1,88 @@
+\chapter{Metodología}
+\label{cap:metodologia}
 
+\section{Descripción del dataset}
+
+Se utilizó el \textit{Water Potability Dataset} \parencite{kaggle2021},
+disponible públicamente en Kaggle. 
+Lo elegimos porque es un conjunto de datos del mundo real que ya viene con sus propios ``huecos'' (valores faltantes), lo que lo hace perfecto para poner a prueba nuestros métodos.
+
+El archivo contiene 3,276 registros con 9 características del agua (como el pH, la dureza, los sólidos, etc.). Nuestra meta final (la variable objetivo) es simple: predecir si el agua es potable (1) o no lo es (0). Desde el inicio, notamos que columnas como el pH, los sulfatos y los trihalometanos ya venían con datos perdidos.
+
+\section{Diseño experimental}
+
+Para que todo sea ordenado y fácil de replicar, estructuramos nuestro trabajo en cinco grandes pasos:
+
+\begin{itemize}
+    \item \textbf{Explorar el terreno:} Hacer un Análisis Exploratorio de Datos (EDA) para conocer a fondo el dataset.
+    \item \textbf{Crear caos controlado:} Borrar datos a propósito para ver si podemos recuperarlos.
+    \item \textbf{Al rescate:} Aplicar nuestros métodos de imputación (Media y KNN) para rellenar los huecos.
+    \item \textbf{Entrenar al juez:} Entrenar y evaluar nuestro modelo de clasificación.
+    \item \textbf{El veredicto:} Comparar qué método dio mejores resultados.
+\end{itemize}
+
+Todo este motor fue construido usando Python 3.12 y librerías clásicas como \texttt{pandas} para manejar los datos, \texttt{scikit-learn} para el machine learning y \texttt{seaborn} para los gráficos. Además, guardamos todo nuestro código en Git para asegurar que cualquier persona pueda reproducir este experimento paso a paso.
+\parencite{wilson2017}.
+
+\section{Introducción de valores faltantes}
+
+
+Para saber si nuestros métodos funcionan, necesitábamos un escenario controlado. Así que tomamos nuestros datos y ``borramos'' un 10\% de la información de forma completamente aleatoria.
+
+En estadística, esto se conoce como el mecanismo MCAR (Missing Completely At Random).\textcite{little2019} Matemáticamente, esto significa que la probabilidad de que un dato desaparezca no depende de ninguna otra cosa en el dataset:
+
+\[
+P(\mathbf{M} \mid \mathbf{X}_{obs}, \mathbf{X}_{mis}) = P(\mathbf{M})
+\]
+
+(Donde $\mathbf{M}$ indica qué valores faltan, $\mathbf{X}_{obs}$ son los datos que sí tenemos y $\mathbf{X}_{mis}$ los que perdimos).
+
+Para asegurarnos de que el experimento siempre arroje los mismos resultados si alguien más lo corre, fijamos una ``semilla'' de aleatoriedad (\texttt{random\_seed = 42}).
+
+\section{Métodos de imputación evaluados}
+
+\subsection{Imputación por media}
+
+Es el método clásico y el más rápido.\parencite{garcia2017}. Si falta el valor del pH en una fila, simplemente calculamos el promedio de todos los pH que sí tenemos y lo pegamos ahí. La fórmula es sencilla:
+
+\[
+\hat{x}_{ij} = \bar{x}_j = \frac{1}{n_j} \sum_{\substack{i=1 \\ x_{ij} \neq \emptyset}}^{n} x_{ij}
+\]
+
+\textbf{Lo bueno:} Es rapidísimo de calcular. \\
+\textbf{Lo malo:} Al poner el mismo número en tantos lugares, matamos la variabilidad natural de los datos y rompemos las relaciones ocultas que esa variable pueda tener con las demás.
+
+\parencite{little2019}.
+
+\subsection{Imputación KNN}
+
+Aquí nos ponemos más inteligentes. KNN (K-Nearest Neighbors) busca las filas que más se parezcan a la que tiene el dato faltante y saca un promedio solo de esos ``vecinos''. \parencite{troyanskaya2001}. Utilizamos la distancia euclidiana para encontrar a los 5 vecinos más cercanos ($k = 5$):
+
+\[
+\hat{x}_{ij} = \frac{1}{k} \sum_{l \in \mathcal{N}_k(i)} x_{lj}
+\]
+
+A diferencia del método anterior, KNN sí toma en cuenta el contexto del dato. Esto nos ayuda a preservar mucho mejor las correlaciones originales, aunque a la computadora le cueste un poco más de esfuerzo calcularlo.
+\parencite{salgado2016}. 
+
+\section{Clasificador base}
+
+
+Para evaluar qué imputación funcionó mejor, usamos un modelo de Regresión Logística. Es un clásico para clasificaciones de ``sí o no'' (como saber si el agua es potable) y es muy fácil de interpretar. \parencite{bishop2006}.
+ 
+Para que el modelo no se confundiera con las diferentes escalas de los datos (por ejemplo, el pH va de 0 a 14, pero los sólidos pueden ser miles), estandarizamos todo primero. Luego, separamos nuestros datos: usamos el 80\% para enseñarle al modelo y guardamos un 20\% para tomarle un examen final. \parencite{pedregosa2011}  
+
+\section{Métricas de evaluación}
+Al modelo lo evaluamos usando dos reglas distintas:
+
+\begin{itemize}
+    \item \textbf{Accuracy (Precisión general):} Es el porcentaje de veces que el modelo acertó. Es fácil de entender, pero puede ser una trampa si tenemos, por ejemplo, muchísima más agua no potable que potable en los datos.  \parencite{japkowicz2002}
+    
+    \item \textbf{F1-score:} Es una métrica mucho más estricta y útil cuando las cosas están desbalanceadas. Combina dos conceptos importantes (la precisión y la exhaustividad) en una sola calificación matemática para penalizar al modelo si solo está adivinando lo más obvio:
+\end{itemize}   \parencite{japkowicz2002}.
+
+\[
+F_1 = 2 \cdot \frac{\text{precision} \cdot \text{recall}}{\text{precision} + \text{recall}}
+\]
+
+\end{itemize}
