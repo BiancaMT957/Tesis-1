@@ -1,1 +1,48 @@
 
+\chapter{Introducción}
+
+\section{Contexto y motivación}
+
+El aprendizaje automático (Machine Learning) está en su mejor momento. Hoy en día lo usamos para resolver problemas en la medicina, las finanzas o la ingeniería con resultados increíbles. Sin embargo, quienes trabajamos en esto nos enfrentamos a un dolor de cabeza constante: los datos del mundo real rara vez están completos.\parencite{little2019}.
+
+Ya sea por el fallo de un sensor, un error humano al registrar la información, o la propia naturaleza del proceso, siempre nos topamos con ``huecos'' en nuestros datasets. Esto es un problema grave porque la gran mayoría de los algoritmos no saben qué hacer cuando les falta información. Antes de poder entrenar cualquier modelo, tenemos que tomar una decisión sobre cómo rellenar esos vacíos; un proceso que conocemos como imputación.\parencite{garcia2017}.
+
+Y aquí está el truco: cómo rellenamos esos datos importa, y mucho. Si simplemente rellenamos los huecos con el promedio general (imputación por media), es rápido y fácil, pero podemos distorsionar la realidad de nuestros datos. Por otro lado, si usamos algoritmos más inteligentes que buscan patrones (como KNN, que se fija en datos ``vecinos'' similares), conservamos mejor la estructura de la información, pero nos cuesta más tiempo y recursos computacionales.\parencite{troyanskaya2001}.
+
+
+\section{Problema de investigación}
+
+A pesar de que rellenar datos faltantes es el pan de cada día para cualquier científico de datos, casi nadie estudia a fondo cómo esta decisión afecta al modelo final cuando ya está funcionando. Muchos estudios prueban los métodos de relleno por separado, pero no miran la ``película completa''.
+
+\parencite{salgado2016}.
+Por eso, en este trabajo nos planteamos la siguiente pregunta: ¿Realmente importa el método que usemos para rellenar datos? Queremos saber si usar un método inteligente (KNN) frente a uno tradicional (la media) cambia de forma significativa la precisión (Accuracy y F1-score) de un modelo de clasificación predictiva.
+\section{Objetivos}
+
+\subsection{Objetivo general}
+
+Queremos medir de forma justa y reproducible qué tanto impacta la decisión entre usar KNN o la Media en el rendimiento final de un modelo de clasificación.
+
+\subsection{Objetivos específicos}
+
+Para llegar a la respuesta, hemos diseñado un plan de acción:
+
+\begin{itemize}
+    \item \textbf{Explorar el terreno:} Analizar a fondo el Water Potability Dataset (nuestros datos sobre calidad del agua) para entender cómo se distribuye la información, qué valores atípicos hay y qué datos faltan de origen.
+    
+    \item \textbf{Simular el problema:} Vamos a ``borrar'' datos a propósito y de forma completamente aleatoria (un mecanismo conocido como MCAR) para ver cómo se comportan nuestros métodos de rescate.
+    
+    \item \textbf{Crear el motor:} Desarrollar un pipeline automatizado y reproducible en Python que aplique ambos métodos de imputación.
+    
+    \item \textbf{Ponerlos a competir:} Medir qué tan bien clasifica un modelo de Regresión Logística dependiendo del método de imputación que haya usado previamente.
+    
+    \item \textbf{Aterrizar las ideas:} Discutir qué significan estos resultados para quienes diseñan sistemas de ciencia de datos en su día a día.
+\end{itemize}
+
+\section{Hipótesis}
+
+Apostamos a que el método KNN va a dar mejores resultados. Creemos que, al fijarse en las similitudes entre las variables para rellenar los huecos, este método conserva mucho mejor la esencia estadística de los datos originales, ayudando a que el modelo final sea más preciso que si solo usáramos promedios simples.
+\section{Alcance y limitaciones}
+
+Para mantener este proyecto enfocado, hemos puesto algunos límites. Solo vamos a comparar dos métodos de imputación usando un único modelo base (Regresión Logística) y un solo dataset. No nos meteremos a optimizar detalles súper técnicos (hiperparámetros) ni a probar docenas de modelos distintos; eso quedará para futuras investigaciones. Además, asumiremos que los datos se pierden siempre de forma 100\% aleatoria (MCAR), dejando de lado otros patrones más complejos de pérdida de información. (\textit{Missing At Random}) ni MNAR
+(\textit{Missing Not At Random}) \parencite{little2019}.
+
