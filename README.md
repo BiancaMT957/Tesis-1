@@ -1,8 +1,8 @@
 # Tesis: Impacto de Métodos de Imputación de Datos Faltantes sobre el Rendimiento de Modelos de Clasificación Supervisada
 
 **Universidad Nacional de Ingeniería**  
-**Autor:** Tu Nombre  
-**Asesor:** Nombre del Asesor  
+**Autor:** Bianca Merchán Torres
+**Asesor:**  Americo Chucunlluy
 
 ---
 
