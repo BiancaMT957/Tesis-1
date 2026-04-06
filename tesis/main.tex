@@ -1,1 +1,35 @@
+\documentclass[12pt, oneside]{report}
 
+% Paquetes
+\usepackage[utf8]{inputenc}
+\usepackage[spanish]{babel}
+\usepackage{geometry}
+\usepackage{graphicx}
+\usepackage{booktabs}
+\usepackage{hyperref}
+\usepackage{setspace}
+\usepackage{csquotes}
+\usepackage[backend=biber, style=apa]{biblatex}
+
+\addbibresource{bibliography/references.bib}
+
+% Márgenes
+\geometry{top=3cm, bottom=3cm, left=4cm, right=2.5cm}
+\onehalfspacing
+
+\begin{document}
+
+
+% Tabla de contenidos
+\tableofcontents
+\newpage
+
+% Capítulos
+\input{chapters/01_introduccion}
+\input{chapters/02_marco_teorico}
+\input{chapters/03_metodologia}
+
+% Bibliografía
+\printbibliography
+
+\end{document}
