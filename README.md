@@ -6,6 +6,7 @@
 
 ---
 
+````
 ##  Estructura del proyecto
 Tesis-1/
 ├── data/
@@ -25,6 +26,7 @@ Tesis-1/
 ├── requirements.txt          # Dependencias del proyecto
 └── README.md                 # Este archivo
 
+````
 
 ---
 
