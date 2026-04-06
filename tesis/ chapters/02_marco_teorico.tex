@@ -1,0 +1,193 @@
+\chapter{Marco Teórico}
+
+\section{Datos faltantes en ciencia de datos}
+
+En el ámbito de la ciencia de datos y el aprendizaje automático, se denomina
+valor faltante a la ausencia de un valor en una o más variables de un registro
+del conjunto de datos. Esta situación es común en datasets del mundo real y
+puede originarse por diversas causas: fallos en sensores o dispositivos de
+medición, errores humanos durante la recolección, pérdida de información en
+la transmisión de datos, o simplemente porque ciertas variables no aplican
+para determinados registros \parencite{little2019}.
+
+La presencia de valores faltantes representa un problema fundamental en el
+preprocesamiento de datos, dado que la mayoría de los algoritmos de
+aprendizaje automático requieren conjuntos de datos completos para su
+funcionamiento. Ignorar los registros con valores faltantes mediante
+eliminación (\textit{listwise deletion}) puede derivar en una pérdida
+significativa de información y en la introducción de sesgos, especialmente
+cuando los datos no se pierden de forma aleatoria \parencite{garcia2017}.
+Por esta razón, la imputación de valores faltantes se ha consolidado como
+una etapa estándar en cualquier pipeline de ciencia de datos.
+
+\section{Mecanismos de ausencia de datos}
+
+La naturaleza de los valores faltantes no es siempre la misma
+\parencite{little2019}  propone una clasificación formal de los mecanismos
+de ausencia en tres categorías, cuya comprensión es fundamental para
+elegir una estrategia de imputación adecuada.
+
+\subsection{MCAR: Missing Completely At Random}
+
+Se dice que los datos son MCAR cuando la probabilidad de que un valor sea
+faltante es completamente independiente de cualquier variable del dataset,
+tanto de los valores observados como de los valores ausentes:
+
+\begin{equation}
+    P(\mathbf{M} \mid \mathbf{X}_{obs}, \mathbf{X}_{mis}) = P(\mathbf{M})
+\end{equation}
+
+donde $\mathbf{M}$ es la matriz de indicadores de valores faltantes,
+$\mathbf{X}_{obs}$ representa los valores observados y $\mathbf{X}_{mis}$
+los valores ausentes. Bajo este mecanismo, los datos faltantes pueden
+considerarse una muestra aleatoria de todos los datos, lo que lo convierte
+en el escenario más favorable para la imputación \parencite{little2019}.
+En el presente trabajo se asume este mecanismo para el diseño del
+experimento controlado.
+
+\subsection{MAR: Missing At Random}
+
+Bajo el mecanismo MAR, la probabilidad de ausencia depende de los valores
+observados, pero no de los valores faltantes en sí mismos. Por ejemplo,
+la probabilidad de que el pH de una muestra de agua no sea registrado
+podría depender de la temperatura del agua, que sí fue medida. Este
+mecanismo es más común en la práctica que MCAR, aunque su verificación
+empírica es compleja \parencite{little2019}.
+
+\subsection{MNAR: Missing Not At Random}
+
+En el mecanismo MNAR, la probabilidad de ausencia depende del propio valor
+faltante. Este es el escenario más difícil de tratar, ya que la ausencia
+de información está relacionada con la información misma. Por ejemplo, si
+los valores extremos de una variable tienden a no ser registrados, los
+datos faltantes no son aleatorios y cualquier método de imputación
+introducirá sesgo \parencite{garcia2017}.
+
+\section{Imputación de datos faltantes}
+
+La imputación es el proceso mediante el cual los valores faltantes de un
+dataset son estimados y reemplazados por valores calculados a partir de la
+información disponible. El objetivo no es recuperar los valores originales
+con exactitud, sino preservar la estructura estadística del dataset de forma
+que el modelo de aprendizaje automático entrenado sobre los datos imputados
+sea lo más representativo posible \parencite{salgado2016}.
+
+Existen múltiples estrategias de imputación, que van desde métodos simples
+basados en estadísticos descriptivos hasta enfoques más sofisticados basados
+en similitud entre instancias o modelos probabilísticos. A continuación se
+describen los dos métodos evaluados en el presente trabajo.
+
+\subsection{Imputación por media}
+
+La imputación por media es el método más utilizado en la práctica debido
+a su simplicidad y eficiencia computacional \parencite{garcia2017}. Consiste
+en reemplazar cada valor faltante $x_{ij}$ del atributo $j$ con la media
+aritmética $\bar{x}_j$ calculada sobre los valores disponibles de dicho
+atributo:
+
+\begin{equation}
+    \hat{x}_{ij} = \bar{x}_j = \frac{1}{n_j}
+    \sum_{\substack{i=1 \\ x_{ij} \neq \emptyset}}^{n} x_{ij}
+\end{equation}
+
+donde $n_j$ es el número de instancias que tienen el atributo $j$ completo.
+
+Este método presenta ventajas claras en términos de velocidad y facilidad
+de implementación. Sin embargo, su principal limitación es que al asignar
+un único valor global a todos los registros faltantes de una columna, reduce
+artificialmente la varianza del atributo y destruye las correlaciones
+existentes entre variables \parencite{little2019}. Esto puede traducirse en
+un dataset imputado que no refleja fielmente la distribución original de los
+datos, afectando negativamente el rendimiento del modelo.
+
+\subsection{Imputación por K-Nearest Neighbors (KNN)}
+
+La imputación por KNN es un método basado en similitud que supera una de
+las principales limitaciones de la imputación por media: la ignorancia de
+las relaciones entre variables \parencite{troyanskaya2001}. En lugar de
+utilizar un estadístico global, este método estima el valor faltante de
+una instancia a partir de los valores del atributo correspondiente en sus
+$k$ vecinos más cercanos, identificados mediante distancia euclidiana en
+el espacio de atributos observados:
+
+\begin{equation}
+    \hat{x}_{ij} = \frac{1}{k} \sum_{l \in \mathcal{N}_k(i)} x_{lj}
+\end{equation}
+
+donde $\mathcal{N}_k(i)$ es el conjunto de los $k$ vecinos más cercanos de
+la instancia $i$ entre aquellas que presentan el atributo $j$ completo, y
+$x_{lj}$ es el valor del atributo $j$ en el vecino $l$.
+
+La intuición detrás de este enfoque es que instancias similares en el
+espacio de características tienden a tener valores similares en sus
+atributos. Al aprovechar esta estructura local del dataset, la imputación
+KNN preserva en mayor medida las correlaciones entre variables, lo que
+puede resultar en una mejor calidad de los datos imputados y, por
+consiguiente, en un mejor rendimiento del clasificador \parencite{salgado2016}.
+
+La elección del parámetro $k$ influye en el resultado: valores pequeños
+de $k$ son más sensibles al ruido local, mientras que valores grandes
+tienden a suavizar demasiado las estimaciones. En la literatura se reporta
+que $k = 5$ es un valor de partida ampliamente adoptado \parencite{salgado2016},
+y es el valor utilizado en el presente experimento.
+
+\section{Modelos de clasificación supervisada}
+
+Un modelo de clasificación supervisada es un algoritmo que aprende a
+asignar una etiqueta de clase a nuevas instancias a partir de un conjunto
+de entrenamiento etiquetado \parencite{bishop2006}. En el contexto de este
+trabajo, el modelo de clasificación opera sobre los datos previamente
+imputados y su rendimiento es utilizado como indicador indirecto de la
+calidad de la imputación aplicada.
+
+\subsection{Regresión Logística}
+
+La Regresión Logística es uno de los modelos de clasificación binaria más
+utilizados como línea base (\textit{baseline}) en ciencia de datos, debido
+a su interpretabilidad y su bajo costo computacional \parencite{bishop2006}.
+El modelo estima la probabilidad de que una instancia pertenezca a la clase
+positiva mediante la función sigmoide:
+
+\begin{equation}
+    P(y = 1 \mid \mathbf{x}) = \frac{1}{1 + e^{-(\mathbf{w}^T \mathbf{x} + b)}}
+\end{equation}
+
+donde $\mathbf{w}$ es el vector de pesos aprendido durante el entrenamiento
+y $b$ es el sesgo (\textit{bias}). La clase predicha se obtiene aplicando
+un umbral de decisión, típicamente de 0.5.
+
+\section{Métricas de evaluación}
+
+La evaluación del rendimiento de un clasificador requiere el uso de métricas
+que reflejen con precisión su capacidad predictiva. En el presente trabajo
+se emplean dos métricas complementarias.
+
+\subsection{Accuracy}
+
+El Accuracy mide la proporción de predicciones correctas sobre el total de
+instancias evaluadas:
+
+\begin{equation}
+    \text{Accuracy} = \frac{TP + TN}{TP + TN + FP + FN}
+\end{equation}
+
+donde $TP$, $TN$, $FP$ y $FN$ representan los verdaderos positivos,
+verdaderos negativos, falsos positivos y falsos negativos, respectivamente.
+Si bien es una métrica intuitiva, puede resultar engañosa en presencia de
+clases desbalanceadas \parencite{japkowicz2002}.
+
+\subsection{F1-score}
+
+El F1-score es la media armónica entre la precisión (\textit{precision}) y
+la exhaustividad (\textit{recall}):
+
+\begin{equation}
+    F_1 = 2 \cdot \frac{\text{precision} \cdot \text{recall}}
+    {\text{precision} + \text{recall}}
+\end{equation}
+
+Esta métrica es especialmente adecuada cuando existe desbalance de clases,
+ya que penaliza los modelos que ignoran la clase minoritaria y predicen
+sistemáticamente la clase mayoritaria \parencite{japkowicz2002}. Por esta
+razón, se considera la métrica principal de comparación en el presente
+experimento.
