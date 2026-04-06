@@ -1,88 +1,140 @@
-\chapter{Metodología}
-\label{cap:metodologia}
+\chapter{Metodologia}
 
 \section{Descripción del dataset}
 
 Se utilizó el \textit{Water Potability Dataset} \parencite{kaggle2021},
-disponible públicamente en Kaggle. 
-Lo elegimos porque es un conjunto de datos del mundo real que ya viene con sus propios ``huecos'' (valores faltantes), lo que lo hace perfecto para poner a prueba nuestros métodos.
+disponible públicamente en la plataforma Kaggle. Este dataset fue
+seleccionado por tratarse de un conjunto de datos tabular del mundo real
+que presenta valores faltantes preexistentes, lo cual lo hace adecuado
+para evaluar métodos de imputación en un contexto de clasificación binaria.
 
-El archivo contiene 3,276 registros con 9 características del agua (como el pH, la dureza, los sólidos, etc.). Nuestra meta final (la variable objetivo) es simple: predecir si el agua es potable (1) o no lo es (0). Desde el inicio, notamos que columnas como el pH, los sulfatos y los trihalometanos ya venían con datos perdidos.
+El conjunto de datos comprende 3276 instancias descritas por 9 atributos
+numéricos continuos: \texttt{ph}, \texttt{Hardness}, \texttt{Solids},
+\texttt{Chloramines}, \texttt{Sulfate}, \texttt{Conductivity},
+\texttt{Organic\_carbon},
+\texttt{Trihalomethanes} y \texttt{Turbidity}.
+La variable objetivo \texttt{Potability} es de naturaleza binaria: el valor
+1 indica que el agua es potable y el valor 0 indica que no lo es. Las
+columnas \texttt{ph}, \texttt{Sulfate} y \texttt{Trihalomethanes} presentan
+valores faltantes en el dataset original.
 
 \section{Diseño experimental}
 
-Para que todo sea ordenado y fácil de replicar, estructuramos nuestro trabajo en cinco grandes pasos:
+El experimento sigue un pipeline de ciencia de datos estructurado en cinco
+etapas secuenciales:
 
-\begin{itemize}
-    \item \textbf{Explorar el terreno:} Hacer un Análisis Exploratorio de Datos (EDA) para conocer a fondo el dataset.
-    \item \textbf{Crear caos controlado:} Borrar datos a propósito para ver si podemos recuperarlos.
-    \item \textbf{Al rescate:} Aplicar nuestros métodos de imputación (Media y KNN) para rellenar los huecos.
-    \item \textbf{Entrenar al juez:} Entrenar y evaluar nuestro modelo de clasificación.
-    \item \textbf{El veredicto:} Comparar qué método dio mejores resultados.
-\end{itemize}
+\begin{enumerate}
+    \item Análisis exploratorio de datos (EDA).
+    \item Introducción controlada de valores faltantes bajo el mecanismo MCAR.
+    \item Aplicación de los métodos de imputación evaluados.
+    \item Entrenamiento y evaluación del modelo de clasificación.
+    \item Comparación de resultados entre métodos.
+\end{enumerate}
 
-Todo este motor fue construido usando Python 3.12 y librerías clásicas como \texttt{pandas} para manejar los datos, \texttt{scikit-learn} para el machine learning y \texttt{seaborn} para los gráficos. Además, guardamos todo nuestro código en Git para asegurar que cualquier persona pueda reproducir este experimento paso a paso.
-\parencite{wilson2017}.
+El pipeline fue implementado en Python 3.12, empleando las librerías
+\texttt{pandas} \parencite{mckinney2010} para la manipulación de datos,
+\texttt{scikit-learn} \parencite{pedregosa2011} para la imputación y el
+clasificador, y \texttt{seaborn} para la generación de visualizaciones.
+El código fuente fue versionado mediante Git, siguiendo los principios de
+ciencia computacional reproducible \parencite{wilson2017}.
 
 \section{Introducción de valores faltantes}
 
-
-Para saber si nuestros métodos funcionan, necesitábamos un escenario controlado. Así que tomamos nuestros datos y ``borramos'' un 10\% de la información de forma completamente aleatoria.
-
-En estadística, esto se conoce como el mecanismo MCAR (Missing Completely At Random).\textcite{little2019} Matemáticamente, esto significa que la probabilidad de que un dato desaparezca no depende de ninguna otra cosa en el dataset:
+Con el propósito de construir un escenario experimental controlado y
+reproducible, se introdujo un 10\% de valores faltantes de forma aleatoria
+sobre la matriz de características del dataset. Este procedimiento sigue
+el mecanismo MCAR (\textit{Missing Completely At Random}), definido por
+\parencite{little2019}., bajo el cual la probabilidad de que un valor sea
+faltante es independiente de cualquier variable del dataset, tanto observada
+como no observada:
 
 \[
 P(\mathbf{M} \mid \mathbf{X}_{obs}, \mathbf{X}_{mis}) = P(\mathbf{M})
 \]
 
-(Donde $\mathbf{M}$ indica qué valores faltan, $\mathbf{X}_{obs}$ son los datos que sí tenemos y $\mathbf{X}_{mis}$ los que perdimos).
-
-Para asegurarnos de que el experimento siempre arroje los mismos resultados si alguien más lo corre, fijamos una ``semilla'' de aleatoriedad (\texttt{random\_seed = 42}).
+donde $\mathbf{M}$ denota la matriz de indicadores de valores faltantes,
+$\mathbf{X}_{obs}$ representa los valores observados y $\mathbf{X}_{mis}$
+los valores ausentes. Se estableció una semilla de aleatoriedad fija
+(\texttt{random\_seed = 42}) para garantizar la reproducibilidad del
+experimento.
 
 \section{Métodos de imputación evaluados}
 
 \subsection{Imputación por media}
 
-Es el método clásico y el más rápido.\parencite{garcia2017}. Si falta el valor del pH en una fila, simplemente calculamos el promedio de todos los pH que sí tenemos y lo pegamos ahí. La fórmula es sencilla:
+La imputación por media constituye el método tradicional más utilizado en
+la práctica \parencite{garcia2017}. Consiste en reemplazar cada valor
+faltante $x_{ij}$ con la media aritmética $\bar{x}_j$ calculada sobre
+los valores disponibles del atributo $j$:
 
 \[
-\hat{x}_{ij} = \bar{x}_j = \frac{1}{n_j} \sum_{\substack{i=1 \\ x_{ij} \neq \emptyset}}^{n} x_{ij}
+\hat{x}_{ij} = \bar{x}_j = \frac{1}{n_j}
+\sum_{\substack{i=1 \\ x_{ij} \neq \emptyset}}^{n} x_{ij}
 \]
 
-\textbf{Lo bueno:} Es rapidísimo de calcular. \\
-\textbf{Lo malo:} Al poner el mismo número en tantos lugares, matamos la variabilidad natural de los datos y rompemos las relaciones ocultas que esa variable pueda tener con las demás.
-
+Su principal ventaja es la eficiencia computacional. No obstante, al
+asignar un valor global idéntico a todos los registros faltantes de una
+misma columna, este método tiende a reducir la varianza del atributo y
+a distorsionar las correlaciones existentes entre variables
 \parencite{little2019}.
 
 \subsection{Imputación KNN}
 
-Aquí nos ponemos más inteligentes. KNN (K-Nearest Neighbors) busca las filas que más se parezcan a la que tiene el dato faltante y saca un promedio solo de esos ``vecinos''. \parencite{troyanskaya2001}. Utilizamos la distancia euclidiana para encontrar a los 5 vecinos más cercanos ($k = 5$):
+La imputación por K-Nearest Neighbors (KNN) es un método basado en
+similitud que estima el valor faltante de una instancia a partir de los
+valores del atributo correspondiente en sus $k$ vecinos más cercanos,
+identificados mediante distancia euclidiana en el espacio de atributos
+observados \parencite{troyanskaya2001}:
 
 \[
 \hat{x}_{ij} = \frac{1}{k} \sum_{l \in \mathcal{N}_k(i)} x_{lj}
 \]
 
-A diferencia del método anterior, KNN sí toma en cuenta el contexto del dato. Esto nos ayuda a preservar mucho mejor las correlaciones originales, aunque a la computadora le cueste un poco más de esfuerzo calcularlo.
-\parencite{salgado2016}. 
+donde $\mathcal{N}_k(i)$ denota el conjunto de los $k$ vecinos más
+cercanos de la instancia $i$ entre aquellas que presentan el atributo
+$j$ completo. A diferencia de la imputación por media, este enfoque
+considera la estructura local del dataset, lo que permite preservar en
+mayor medida las relaciones entre variables \parencite{salgado2016}.
+En el presente experimento se utilizó $k = 5$.
 
 \section{Clasificador base}
 
-
-Para evaluar qué imputación funcionó mejor, usamos un modelo de Regresión Logística. Es un clásico para clasificaciones de ``sí o no'' (como saber si el agua es potable) y es muy fácil de interpretar. \parencite{bishop2006}.
- 
-Para que el modelo no se confundiera con las diferentes escalas de los datos (por ejemplo, el pH va de 0 a 14, pero los sólidos pueden ser miles), estandarizamos todo primero. Luego, separamos nuestros datos: usamos el 80\% para enseñarle al modelo y guardamos un 20\% para tomarle un examen final. \parencite{pedregosa2011}  
+Se empleó Regresión Logística como modelo de clasificación base, dado su
+amplio uso como referencia (\textit{baseline}) en problemas de clasificación
+binaria y su capacidad de interpretación \parencite{bishop2006}. Se utilizó
+la implementación disponible en \texttt{scikit-learn} \parencite{pedregosa2011},
+con un máximo de 1000 iteraciones para asegurar la convergencia del algoritmo.
+Los atributos fueron estandarizados mediante \textit{StandardScaler} previo
+al entrenamiento, con el fin de evitar que diferencias de escala entre
+variables afecten el desempeño del modelo. La partición de los datos fue
+de 80\% para entrenamiento y 20\% para prueba, con estratificación para
+preservar la proporción de clases en ambos subconjuntos.
 
 \section{Métricas de evaluación}
-Al modelo lo evaluamos usando dos reglas distintas:
+
+El rendimiento del clasificador fue evaluado mediante dos métricas
+complementarias:
 
 \begin{itemize}
-    \item \textbf{Accuracy (Precisión general):} Es el porcentaje de veces que el modelo acertó. Es fácil de entender, pero puede ser una trampa si tenemos, por ejemplo, muchísima más agua no potable que potable en los datos.  \parencite{japkowicz2002}
-    
-    \item \textbf{F1-score:} Es una métrica mucho más estricta y útil cuando las cosas están desbalanceadas. Combina dos conceptos importantes (la precisión y la exhaustividad) en una sola calificación matemática para penalizar al modelo si solo está adivinando lo más obvio:
-\end{itemize}   \parencite{japkowicz2002}.
+    \item \textbf{Accuracy:} mide la proporción de predicciones correctas
+          sobre el total de instancias evaluadas. Si bien es una métrica
+          intuitiva, puede resultar engañosa en presencia de clases
+          desbalanceadas, dado que un modelo que predice sistemáticamente
+          la clase mayoritaria puede obtener un Accuracy elevado sin
+          aprender patrones útiles \parencite{japkowicz2002}.
 
-\[
-F_1 = 2 \cdot \frac{\text{precision} \cdot \text{recall}}{\text{precision} + \text{recall}}
-\]
+    \item \textbf{F1-score:} constituye la media armónica entre la
+          precisión (\textit{precision}) y la exhaustividad
+          (\textit{recall}):
 
+          \[
+          F_1 = 2 \cdot \frac{\text{precision} \cdot \text{recall}}
+          {\text{precision} + \text{recall}}
+          \]
+
+          Esta métrica es especialmente adecuada cuando existe desbalance
+          de clases, ya que penaliza los modelos que ignoran la clase
+          minoritaria \parencite{japkowicz2002}. Por esta razón, se
+          considera la métrica principal de comparación en el presente
+          experimento.
 \end{itemize}
