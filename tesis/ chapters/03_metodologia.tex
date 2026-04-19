@@ -41,7 +41,7 @@ ciencia computacional reproducible \parencite{wilson2017}.
 \section{Introducción de valores faltantes}
 
 Con el propósito de construir un escenario experimental controlado y
-reproducible, se introdujo un 10\% de valores faltantes de forma aleatoria
+reproducible, introduje un 10\% de valores faltantes de forma aleatoria
 sobre la matriz de características del dataset. Este procedimiento sigue
 el mecanismo MCAR (\textit{Missing Completely At Random}), definido por
 \parencite{little2019}., bajo el cual la probabilidad de que un valor sea
@@ -54,7 +54,7 @@ P(\mathbf{M} \mid \mathbf{X}_{obs}, \mathbf{X}_{mis}) = P(\mathbf{M})
 
 donde $\mathbf{M}$ denota la matriz de indicadores de valores faltantes,
 $\mathbf{X}_{obs}$ representa los valores observados y $\mathbf{X}_{mis}$
-los valores ausentes. Se estableció una semilla de aleatoriedad fija
+los valores ausentes. Estableci una semilla de aleatoriedad fija
 (\texttt{random\_seed = 42}) para garantizar la reproducibilidad del
 experimento.
 
@@ -99,9 +99,9 @@ En el presente experimento se utilizó $k = 5$.
 
 \section{Clasificador base}
 
-Se empleó Regresión Logística como modelo de clasificación base, dado su
+Emplee Regresión Logística como modelo de clasificación base, dado su
 amplio uso como referencia (\textit{baseline}) en problemas de clasificación
-binaria y su capacidad de interpretación \parencite{bishop2006}. Se utilizó
+binaria y su capacidad de interpretación \parencite{bishop2006}.Utilize
 la implementación disponible en \texttt{scikit-learn} \parencite{pedregosa2011},
 con un máximo de 1000 iteraciones para asegurar la convergencia del algoritmo.
 Los atributos fueron estandarizados mediante \textit{StandardScaler} previo
@@ -117,7 +117,7 @@ que ajusta automáticamente los pesos de cada clase de forma inversamente
 proporcional a su frecuencia, penalizando en mayor medida los errores
 sobre la clase minoritaria \parencite{japkowicz2002}.
 
-Adicionalmente, se incluyó la matriz de confusión como herramienta de
+Adicionalmente, inclui la matriz de confusión como herramienta de
 diagnóstico para verificar el comportamiento del modelo por clase y
 confirmar si el clasificador predice ambas clases o solo la mayoritaria.
 
