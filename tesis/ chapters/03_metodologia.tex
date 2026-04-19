@@ -110,6 +110,17 @@ variables afecten el desempeño del modelo. La partición de los datos fue
 de 80\% para entrenamiento y 20\% para prueba, con estratificación para
 preservar la proporción de clases en ambos subconjuntos.
 
+Dado que el dataset presenta un desbalance de clases —aproximadamente
+un 61\% de instancias no potables frente a un 39\% de instancias
+potables— se incorporó el parámetro \texttt{class\_weight='balanced'},
+que ajusta automáticamente los pesos de cada clase de forma inversamente
+proporcional a su frecuencia, penalizando en mayor medida los errores
+sobre la clase minoritaria \parencite{japkowicz2002}.
+
+Adicionalmente, se incluyó la matriz de confusión como herramienta de
+diagnóstico para verificar el comportamiento del modelo por clase y
+confirmar si el clasificador predice ambas clases o solo la mayoritaria.
+
 \section{Métricas de evaluación}
 
 El rendimiento del clasificador fue evaluado mediante dos métricas
@@ -137,4 +148,41 @@ complementarias:
           minoritaria \parencite{japkowicz2002}. Por esta razón, se
           considera la métrica principal de comparación en el presente
           experimento.
+Dado el desbalance de clases identificado en el dataset, se reportan
+adicionalmente las siguientes métricas por clase:
+
+\begin{itemize}
+    \item \textbf{Precisión (\textit{Precision}):} mide la proporción
+          de predicciones positivas que fueron correctas. Es decir,
+          de todos los casos que el modelo clasificó como potables,
+          ¿cuántos realmente lo eran?:
+
+          \begin{equation}
+              \text{Precision} = \frac{TP}{TP + FP}
+          \end{equation}
+
+          Un valor bajo de precisión indica que el modelo genera muchos
+          falsos positivos, es decir, clasifica agua no potable como
+          potable \parencite{japkowicz2002}.
+
+    \item \textbf{Exhaustividad (\textit{Recall}):} mide la proporción
+          de casos positivos reales que el modelo fue capaz de detectar.
+          Es decir, de toda el agua que realmente era potable, ¿cuánta
+          logró identificar el modelo?:
+
+          \begin{equation}
+              \text{Recall} = \frac{TP}{TP + FN}
+          \end{equation}
+
+          Un valor bajo de recall indica que el modelo ignora gran parte
+          de la clase minoritaria, lo cual es especialmente crítico en
+          problemas donde no detectar un caso positivo tiene consecuencias
+          importantes \parencite{japkowicz2002}.
+\end{itemize}
+
+Estas métricas se reportan de forma desagregada por clase, permitiendo
+identificar si el clasificador presenta un comportamiento asimétrico
+entre la clase mayoritaria (no potable) y la clase minoritaria (potable).
+
+
 \end{itemize}
