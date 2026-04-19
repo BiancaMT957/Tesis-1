@@ -89,11 +89,44 @@ jupyter notebook notebooks/02_experimento.ipynb
 ---
 
 ##  Resultados
+### Distribución de clases
+| Clase | Cantidad | Porcentaje |
+|---|---|---|
+| No potable (0) | 1998 | 61.0% |
+| Potable (1) | 1278 | 39.0% |
 
+>  El dataset presenta desbalance de clases. Se aplicó `class_weight='balanced'`
+> en la Regresión Logística para que el modelo no ignore la clase minoritaria.
+
+### Métricas por método de imputación
 | Método | Accuracy | F1-score |
 |---|---|---|
 | Imputación por Media | 0.6113 | 0.0078 |
 | Imputación KNN | 0.6113 | 0.0078 |
+
+### Análisis de resultados
+Ambos métodos arrojaron resultados idénticos. Esto se explica por tres razones:
+
+1. **Desbalance de clases:** con ~61% de muestras no potables, el modelo
+   tendía a predecir siempre la clase mayoritaria, produciendo Accuracy
+   alto pero F1-score cercano a 0.
+2. **Naturaleza del dataset:** las variables fisicoquímicas tienen
+   distribuciones similares entre clases, lo que dificulta la separación
+   lineal con Regresión Logística.
+3. **Impacto de la imputación:** con solo un 10% de valores faltantes,
+   la diferencia entre métodos puede ser mínima cuando el modelo base
+   no es suficientemente sensible a pequeñas variaciones en los datos.
+
+### Figuras generadas
+| Archivo | Descripción |
+|---|---|
+| `results/figures/comparacion_metodos.png` | Gráfico comparativo Accuracy y F1-score |
+| `results/figures/distribucion_clases.png` | Distribución de clases del dataset |
+| `results/figures/confusion_Imputación_por_Media.png` | Matriz de confusión — Media |
+| `results/figures/confusion_Imputación_KNN.png` | Matriz de confusión — KNN |
+| `results/figures/distribucion_potabilidad.png` | Distribución variable objetivo |
+| `results/figures/histogramas_variables.png` | Histogramas de todas las variables |
+| `results/figures/correlacion.png` | Mapa de calor de correlaciones |
 
 ---
 
