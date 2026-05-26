@@ -6,7 +6,7 @@
 | | |
 |---|---|
 | **Autora** | Bianca Merchán Torres |
-| **Asesor** | Américo Chucunlluy |
+| **Asesor** | Américo Chulluncuy |
 | **Dataset** | [Water Potability Dataset](https://www.kaggle.com/datasets/adityakadiwal/water-potability) — Kaggle |
 | **Lenguaje** | Python 3.12 |
 | **Reproducibilidad** | `random_seed = 42` en todo el pipeline |
