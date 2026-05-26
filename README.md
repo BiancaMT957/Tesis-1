@@ -1,4 +1,4 @@
-# Impacto de Métodos de Imputación de Datos Faltantes sobre el Rendimiento de Modelos de Clasificación Supervisada
+# Impacto de métodos de imputación de datos faltantes en el rendimiento de modelos declasificación supervisada : comparación entre KNN y métodos tradicionales
 
 **Universidad Nacional de Ingeniería — Facultad de Ciencias**  
 **Escuela Profesional de Ciencia de la Computación**
