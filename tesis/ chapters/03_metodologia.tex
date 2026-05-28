@@ -2,24 +2,26 @@
 
 \section{Descripción del dataset}
 
-Se utilizó el \textit{Water Potability Dataset} \parencite{kaggle2021},
-disponible públicamente en la plataforma Kaggle. Este dataset fue
+Se utilizó el conjunto de datos \textit{Water Potability Dataset with 10 Parameters},
+publicado en la plataforma Kaggle por Devanshi Bavaria
+\parencite{kaggle2021}. El \textit{dataset} se encuentra disponible en la URL
+indicada en la referencia bibliográfica correspondiente. Este \textit{dataset} fue
 seleccionado por tratarse de un conjunto de datos tabular del mundo real
 que presenta valores faltantes preexistentes, lo cual lo hace adecuado
 para evaluar métodos de imputación en un contexto de clasificación binaria.
 
 El conjunto de datos comprende 3276 instancias descritas por 9 atributos
-numéricos continuos: \texttt{ph}, \texttt{Hardness}, \texttt{Solids},
-\texttt{Chloramines}, \texttt{Sulfate}, \texttt{Conductivity},
-\texttt{Organic\_carbon}, \texttt{Trihalomethanes} y \texttt{Turbidity}.
+numéricos continuos: \texttt{ph},  \texttt{Hardness},  \texttt{Solids}, 
+\texttt{Chloramines},  \texttt{Sulfate},  \texttt{Conductivity}, 
+\texttt{Organic\_carbon},  \texttt{Trihalomethanes}  y  \texttt{Turbidity}.
 La variable objetivo \texttt{Potability} es de naturaleza binaria: el valor
 1 indica que el agua es potable y el valor 0 indica que no lo es. Las
 columnas \texttt{ph}, \texttt{Sulfate} y \texttt{Trihalomethanes} presentan
-valores faltantes en el dataset original.
+valores faltantes en el \textit{dataset} original.
 
 \section{Diseño experimental}
 
-El experimento sigue un pipeline de ciencia de datos estructurado en cinco
+El experimento sigue un \textit{pipeline} de ciencia de datos estructurado en cinco
 etapas secuenciales:
 
 \begin{enumerate}
@@ -30,7 +32,7 @@ etapas secuenciales:
     \item Comparación de resultados entre métodos.
 \end{enumerate}
 
-El pipeline fue implementado en Python 3.12, empleando las librerías
+El \textit{pipeline} fue implementado en Python 3.12, empleando las librerías
 \texttt{pandas} \parencite{mckinney2010} para la manipulación de datos,
 \texttt{scikit-learn} \parencite{pedregosa2011} para la imputación y el
 clasificador, y \texttt{seaborn} para la generación de visualizaciones.
@@ -41,11 +43,11 @@ ciencia computacional reproducible \parencite{wilson2017}.
 
 Con el propósito de construir un escenario experimental controlado y
 reproducible, se introdujo un 10\% de valores faltantes de forma aleatoria
-sobre la matriz de características del dataset. Este procedimiento sigue
+sobre la matriz de características del \textit{dataset}. Este procedimiento sigue
 el mecanismo MCAR (\textit{Missing Completely At Random}), definido por
-Little y Rubin \parencite{little2019}, bajo el cual la probabilidad de que
-un valor sea faltante es independiente de cualquier variable del dataset,
-tanto observada como no observada:
+\textcite{little2019}, bajo el cual la probabilidad de que un valor sea
+faltante es independiente de cualquier variable del \textit{dataset}, tanto
+observada como no observada:
 
 \[
 P(\mathbf{M} \mid \mathbf{X}_{obs}, \mathbf{X}_{mis}) = P(\mathbf{M})
@@ -93,7 +95,7 @@ observados \parencite{troyanskaya2001}:
 donde $\mathcal{N}_k(i)$ denota el conjunto de los $k$ vecinos más
 cercanos de la instancia $i$ entre aquellas que presentan el atributo
 $j$ completo. A diferencia de la imputación por media, este enfoque
-considera la estructura local del dataset, lo que permite preservar en
+considera la estructura local del \textit{dataset}, lo que permite preservar en
 mayor medida las relaciones entre variables \parencite{salgado2016}.
 En el presente experimento se utilizó $k = 5$.
 
@@ -102,15 +104,16 @@ En el presente experimento se utilizó $k = 5$.
 Se empleó Regresión Logística como modelo de clasificación base, dado su
 amplio uso como referencia (\textit{baseline}) en problemas de clasificación
 binaria y su capacidad de interpretación \parencite{bishop2006}. Se utilizó
-la implementación disponible en \texttt{scikit-learn} \parencite{pedregosa2011},
-con un máximo de 1000 iteraciones para asegurar la convergencia del algoritmo.
-Los atributos fueron estandarizados mediante \textit{StandardScaler} previo
-al entrenamiento, con el fin de evitar que diferencias de escala entre
-variables afecten el desempeño del modelo. La partición de los datos fue
-de 80\% para entrenamiento y 20\% para prueba, con estratificación para
-preservar la proporción de clases en ambos subconjuntos.
+la implementación disponible en \texttt{scikit-learn}
+\parencite{pedregosa2011}, con un máximo de 1000 iteraciones para asegurar
+la convergencia del algoritmo. Los atributos fueron estandarizados mediante
+\textit{StandardScaler} previo al entrenamiento, con el fin de evitar que
+diferencias de escala entre variables afecten el desempeño del modelo. La
+partición de los datos fue de 80\% para entrenamiento y 20\% para prueba,
+con estratificación para preservar la proporción de clases en ambos
+subconjuntos.
 
-Dado que el dataset presenta un desbalance de clases —aproximadamente
+Dado que el \textit{dataset} presenta un desbalance de clases —aproximadamente
 un 61\% de instancias no potables frente a un 39\% de instancias
 potables— se incorporó el parámetro \texttt{class\_weight='balanced'},
 que ajusta automáticamente los pesos de cada clase de forma inversamente
@@ -150,7 +153,7 @@ complementarias:
           experimento.
 \end{itemize}
 
-Dado el desbalance de clases identificado en el dataset, se reportan
+Dado el desbalance de clases identificado en el \textit{dataset}, se reportan
 adicionalmente las siguientes métricas por clase:
 
 \begin{itemize}
@@ -181,7 +184,3 @@ adicionalmente las siguientes métricas por clase:
           problemas donde no detectar un caso positivo tiene consecuencias
           importantes \parencite{japkowicz2002}.
 \end{itemize}
-
-Estas métricas se reportan de forma desagregada por clase, permitiendo
-identificar si el clasificador presenta un comportamiento asimétrico
-entre la clase mayoritaria (no potable) y la clase minoritaria (potable).
