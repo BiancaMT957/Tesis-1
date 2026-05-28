@@ -1,35 +1,56 @@
-\documentclass[12pt, oneside]{report}
+\documentclass[12pt, oneside, a4paper]{report}
 
-% Paquetes
+% Codificación y lenguaje
 \usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
 \usepackage[spanish]{babel}
+
+% Matemática
+\usepackage{amsmath}
+\usepackage{amssymb}
+
+
+% Diseño y utilidades
 \usepackage{geometry}
 \usepackage{graphicx}
 \usepackage{booktabs}
 \usepackage{hyperref}
 \usepackage{setspace}
+\usepackage{float}
 \usepackage{csquotes}
-\usepackage[backend=biber, style=apa]{biblatex}
 
-\addbibresource{bibliography/references.bib}
+
+% Bibliografía APA
+\usepackage[
+backend=biber,
+style=apa,
+natbib=true
+]{biblatex}
+
+\addbibresource{bibliography/referencias.bib}
+
 
 % Márgenes
-\geometry{top=3cm, bottom=3cm, left=4cm, right=2.5cm}
+\geometry{
+top=3cm,
+bottom=3cm,
+left=4cm,
+right=2.5cm
+}
+
 \onehalfspacing
 
 \begin{document}
 
 \input{frontmatter/portada}
-% Tabla de contenidos
+
 \tableofcontents
 \newpage
 
-% Capítulos
 \input{chapters/01_introduccion}
 \input{chapters/02_marco_teorico}
 \input{chapters/03_metodologia}
 
-% Bibliografía
 \printbibliography
 
 \end{document}
