@@ -27,17 +27,16 @@ variables. Métodos basados en similitud, como la imputación por
 estadística del conjunto de datos, aunque a un costo computacional más
 elevado \parencite{troyanskaya2001}.
 
-
 \section{Problema de investigación}
 
 A pesar de que la imputación de datos faltantes es una tarea fundamental
-en el preprocesamiento de cualquier pipeline de ciencia de datos, existe
+en el preprocesamiento de cualquier \textit{pipeline} de ciencia de datos, existe
 escasa evidencia empírica que evalúe de forma sistemática el impacto que
 tiene la elección del método de imputación sobre el rendimiento final del
 modelo de clasificación \parencite{salgado2016}. La mayoría de los estudios
 existentes analizan los métodos de imputación de manera aislada, sin evaluar
 el impacto integral de dicha elección sobre el rendimiento del clasificador
-en el pipeline completo.
+en el \textit{pipeline} completo.
 
 En este contexto, el presente trabajo plantea la siguiente pregunta de
 investigación: ¿en qué medida el método de imputación utilizado —KNN frente
@@ -66,7 +65,7 @@ y reproducible.
           Completely At Random}), con el fin de simular escenarios de
           datos incompletos en condiciones reproducibles.
 
-    \item Implementar un pipeline automatizado en Python que aplique los
+    \item Implementar un \textit{pipeline} automatizado en Python que aplique los
           métodos de imputación por media e imputación KNN de forma
           sistemática y reproducible.
 
@@ -75,7 +74,7 @@ y reproducible.
           Logística entrenado sobre los datos imputados.
 
     \item Analizar las implicancias prácticas de los resultados obtenidos
-          para el diseño de pipelines de ciencia de datos en escenarios
+          para el diseño de \textit{pipelines} de ciencia de datos en escenarios
           con datos incompletos.
 \end{itemize}
 
@@ -84,7 +83,7 @@ y reproducible.
 Se plantea la hipótesis de que el método de imputación KNN produce un
 mejor rendimiento en el modelo de clasificación en comparación con la
 imputación por media. Esto se fundamenta en que KNN estima los valores
-faltantes considerando la similitud entre instancias del dataset, lo que
+faltantes considerando la similitud entre instancias del \textit{dataset}, lo que
 permite preservar en mayor medida la estructura estadística y las
 correlaciones originales entre variables, proporcionando así información
 de mayor calidad al clasificador \parencite{troyanskaya2001}.
@@ -92,7 +91,7 @@ de mayor calidad al clasificador \parencite{troyanskaya2001}.
 \section{Alcance y limitaciones}
 
 El presente trabajo se limita a la comparación de dos métodos de imputación
-—media y KNN— aplicados sobre un único dataset y evaluados mediante un
+—media y KNN— aplicados sobre un único \textit{dataset} y evaluados mediante un
 único modelo de clasificación base (Regresión Logística). No se aborda la
 optimización de hiperparámetros ni la comparación entre múltiples
 clasificadores, aspectos que quedan propuestos como líneas de trabajo futuro.
@@ -103,3 +102,4 @@ de que un valor sea faltante es independiente de cualquier variable observada
 o no observada \parencite{little2019}. Los mecanismos MAR (\textit{Missing
 At Random}) y MNAR (\textit{Missing Not At Random}), que representan
 escenarios de mayor complejidad, quedan fuera del alcance de este estudio.
+
