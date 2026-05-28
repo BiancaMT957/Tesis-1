@@ -4,7 +4,7 @@
 
 En el ámbito de la ciencia de datos y el aprendizaje automático, se denomina
 valor faltante a la ausencia de un valor en una o más variables de un registro
-del conjunto de datos. Esta situación es común en datasets del mundo real y
+del conjunto de datos. Esta situación es común en \textit{datasets} del mundo real y
 puede originarse por diversas causas: fallos en sensores o dispositivos de
 medición, errores humanos durante la recolección, pérdida de información en
 la transmisión de datos, o simplemente porque ciertas variables no aplican
@@ -18,18 +18,18 @@ eliminación (\textit{listwise deletion}) puede derivar en una pérdida
 significativa de información y en la introducción de sesgos, especialmente
 cuando los datos no se pierden de forma aleatoria \parencite{garcia2017}.
 Por esta razón, la imputación de valores faltantes se ha consolidado como
-una etapa estándar en cualquier pipeline de ciencia de datos.
+una etapa estándar en cualquier \textit{pipeline} de ciencia de datos.
 
 \section{Mecanismos de ausencia de datos}
 
-Little y Rubin \parencite{little2019} proponen una clasificación formal de
+\textcite{little2019} proponen una clasificación formal de
 los mecanismos de ausencia en tres categorías, cuya comprensión es
 fundamental para elegir una estrategia de imputación adecuada.
 
 \subsection{MCAR: Missing Completely At Random}
 
 Se dice que los datos son MCAR cuando la probabilidad de que un valor sea
-faltante es completamente independiente de cualquier variable del dataset,
+faltante es completamente independiente de cualquier variable del \textit{dataset},
 tanto de los valores observados como de los valores ausentes:
 
 \begin{equation}
@@ -65,9 +65,9 @@ introducirá sesgo \parencite{garcia2017}.
 \section{Imputación de datos faltantes}
 
 La imputación es el proceso mediante el cual los valores faltantes de un
-dataset son estimados y reemplazados por valores calculados a partir de la
+\textit{dataset} son estimados y reemplazados por valores calculados a partir de la
 información disponible. El objetivo no es recuperar los valores originales
-con exactitud, sino preservar la estructura estadística del dataset de forma
+con exactitud, sino preservar la estructura estadística del \textit{dataset} de forma
 que el modelo de aprendizaje automático entrenado sobre los datos imputados
 sea lo más representativo posible \parencite{salgado2016}.
 
@@ -97,7 +97,7 @@ de implementación. Sin embargo, su principal limitación es que al asignar
 un único valor global a todos los registros faltantes de una columna, reduce
 artificialmente la varianza del atributo y destruye las correlaciones
 existentes entre variables \parencite{little2019}. Esto puede traducirse en
-un dataset imputado que no refleja fielmente la distribución original de los
+un \textit{dataset} imputado que no refleja fielmente la distribución original de los
 datos, afectando negativamente el rendimiento del modelo.
 
 \subsection{Imputación por K-Nearest Neighbors (KNN)}
@@ -120,16 +120,17 @@ $x_{lj}$ es el valor del atributo $j$ en el vecino $l$.
 
 La intuición detrás de este enfoque es que instancias similares en el
 espacio de características tienden a tener valores similares en sus
-atributos. Al aprovechar esta estructura local del dataset, la imputación
+atributos. Al aprovechar esta estructura local del \textit{dataset}, la imputación
 KNN preserva en mayor medida las correlaciones entre variables, lo que
 puede resultar en una mejor calidad de los datos imputados y, por
-consiguiente, en un mejor rendimiento del clasificador \parencite{salgado2016}.
+consiguiente, en un mejor rendimiento del clasificador
+\parencite{salgado2016}.
 
 La elección del parámetro $k$ influye en el resultado: valores pequeños
 de $k$ son más sensibles al ruido local, mientras que valores grandes
 tienden a suavizar demasiado las estimaciones. En la literatura se reporta
-que $k = 5$ es un valor de partida ampliamente adoptado \parencite{salgado2016},
-y es el valor utilizado en el presente experimento.
+que $k = 5$ es un valor de partida ampliamente adoptado
+\parencite{salgado2016}, y es el valor utilizado en el presente experimento.
 
 \section{Modelos de clasificación supervisada}
 
@@ -144,9 +145,9 @@ calidad de la imputación aplicada.
 
 La Regresión Logística es uno de los modelos de clasificación binaria más
 utilizados como línea base (\textit{baseline}) en ciencia de datos, debido
-a su interpretabilidad y su bajo costo computacional \parencite{bishop2006}.
-El modelo estima la probabilidad de que una instancia pertenezca a la clase
-positiva mediante la función sigmoide:
+a su interpretabilidad y su bajo costo computacional
+\parencite{bishop2006}. El modelo estima la probabilidad de que una
+instancia pertenezca a la clase positiva mediante la función sigmoide:
 
 \begin{equation}
     P(y = 1 \mid \mathbf{x}) = \frac{1}{1 + e^{-(\mathbf{w}^T \mathbf{x} + b)}}
