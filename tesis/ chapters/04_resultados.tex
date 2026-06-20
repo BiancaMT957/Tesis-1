@@ -1,0 +1,196 @@
+\chapter{Resultados y Discusión}
+
+\section{Tabla consolidada de resultados}
+
+Los doce modelos evaluados —seis escenarios $\times$ dos métodos de
+imputación— producen los resultados recogidos en la
+Tabla~\ref{tab:resultados_mcar}. Cada fila corresponde a un nivel de
+incompletitud distinto; los valores reportados son Accuracy y F1-score
+medidos sobre las 655 instancias del conjunto de prueba con el clasificador
+de Regresión Logística (\texttt{class\_weight='balanced'}, \texttt{SEED = 42}).
+
+\begin{table}[H]
+\centering
+\caption{Accuracy y F1-score por método de imputación y porcentaje de
+         datos faltantes MCAR. Experimento sobre \textit{Water Potability Dataset}
+         con Regresión Logística (\texttt{SEED = 42}).}
+\label{tab:resultados_mcar}
+\begin{tabular}{@{}ccccc@{}}
+\toprule
+\multirow{2}{*}{\textbf{Faltantes (\%)}}
+  & \multicolumn{2}{c}{\textbf{Accuracy}}
+  & \multicolumn{2}{c}{\textbf{F1-score}} \\
+\cmidrule(lr){2-3} \cmidrule(lr){4-5}
+  & \textbf{Media} & \textbf{KNN} & \textbf{Media} & \textbf{KNN} \\
+\midrule
+ 5  & 0.5351 & \textbf{0.5488} & 0.4857 & \textbf{0.4897} \\
+10  & 0.5305 & \textbf{0.5335} & 0.4690 & \textbf{0.4814} \\
+20  & \textbf{0.5107} & 0.5076 & \textbf{0.4659} & 0.4553 \\
+30  & \textbf{0.5412} & 0.5213 & \textbf{0.4872} & 0.4767 \\
+40  & 0.5244 & \textbf{0.5366} & \textbf{0.4800} & 0.4704 \\
+50  & \textbf{0.5137} & 0.5015 & \textbf{0.4491} & 0.4333 \\
+\bottomrule
+\multicolumn{5}{l}{\small En negrita: método con mayor valor en cada escenario.}
+\end{tabular}
+\end{table}
+
+\section{Análisis por métrica}
+
+\subsection{Accuracy}
+
+La Figura~\ref{fig:accuracy_mcar} traza la evolución del Accuracy de
+ambos métodos a lo largo de los seis escenarios. Con 5\% y 10\% de datos
+faltantes, KNN obtiene Accuracy superior al de la imputación por media
+($+$0.0137 y $+$0.0030, respectivamente). A partir del 20\%, esa relación
+se invierte: la imputación por media iguala o supera a KNN en cuatro de
+los cuatro escenarios restantes.
+
+La brecha más amplia a favor de la media se registra al 30\% MCAR
+($\Delta = -0.0199$ para KNN), mientras que la mayor ventaja de KNN ocurre
+en el escenario de menor incompletitud ($\Delta = +0.0137$ al 5\%). En
+cualquier caso, ambos métodos se mantienen dentro del rango 0.50--0.55,
+valor que refleja el techo de rendimiento impuesto por la baja
+separabilidad lineal del \textit{dataset}.
+
+\begin{figure}[H]
+\centering
+\includegraphics[width=0.95\textwidth]{../results/figures/mcar_accuracy_f1.png}
+\caption{Accuracy (izquierda) y F1-score (derecha) en función del
+         porcentaje de datos faltantes MCAR para los dos métodos de
+         imputación evaluados.}
+\label{fig:accuracy_mcar}
+\end{figure}
+
+\subsection{F1-score}
+
+El F1-score replica el patrón anterior y lo acentúa en los extremos.
+KNN aventaja a la media en los escenarios del 5\% ($+$0.0040) y 10\%
+($+$0.0124), pero desde el 20\% en adelante la media retoma el liderazgo
+en todos los escenarios sin excepción.
+
+La divergencia más notable ocurre al 50\% de datos faltantes: la media
+alcanza un F1 de 0.4491 frente a 0.4333 de KNN, una diferencia de 0.0158.
+Cuando la mitad de los valores han sido eliminados, el espacio de atributos
+disponibles para construir vecindarios resulta demasiado reducido, y KNN
+pierde la ventaja que la estructura local del \textit{dataset} podría
+haberle otorgado en condiciones de mayor completitud.
+
+\begin{figure}[H]
+\centering
+\includegraphics[width=0.95\textwidth]{../results/figures/mcar_diferencia_metodos.png}
+\caption{Diferencia en Accuracy (izquierda) y F1-score (derecha) entre
+         KNN e imputación por media ($\Delta = \text{KNN} - \text{Media}$)
+         por porcentaje de datos faltantes. Barras en rojo indican
+         ventaja de KNN; barras en azul indican ventaja de la media.}
+\label{fig:diferencia_mcar}
+\end{figure}
+
+\section{Discusión}
+
+\subsection{Efecto del porcentaje de datos faltantes sobre el rendimiento}
+
+La hipótesis H1 postulaba una degradación progresiva del rendimiento
+conforme aumenta el porcentaje de datos faltantes. Los resultados no
+respaldan esa tendencia: tanto el Accuracy como el F1-score oscilan de
+forma irregular entre el 5\% y el 50\% de incompletitud, sin una
+caída sostenida para ninguno de los dos métodos.
+
+Este comportamiento tiene una explicación teórica directa. Bajo el
+mecanismo MCAR, la media muestral es un estimador insesgado del valor
+faltante, por lo que el clasificador no acumula sesgo sistemático a medida
+que crece la proporción de imputaciones \parencite{little2019}. La
+varianza observada entre escenarios responde más a la aleatoriedad de
+la máscara MCAR —evaluada con una única semilla— que a un efecto real
+del porcentaje de incompletitud sobre el rendimiento del modelo. A ello
+se suma que ninguna correlación entre las variables fisicoquímicas del
+\textit{dataset} y la etiqueta de potabilidad supera 0.15 en valor
+absoluto, lo que establece un techo de rendimiento bajo para la
+Regresión Logística independientemente de cómo se imputen los valores
+faltantes.
+
+\subsection{Comparación entre métodos por porcentaje de faltantes}
+
+La hipótesis H2 recibe respaldo parcial. En los escenarios de baja
+incompletitud (5\% y 10\%), KNN supera a la imputación por media tanto
+en Accuracy como en F1-score, lo que concuerda con la lógica de los
+métodos basados en similitud: cuando la mayor parte de los atributos
+está disponible, los vecindarios son representativos y la estimación
+local supera a la estimación global \parencite{troyanskaya2001,garcia_laencina2010}.
+
+Desde el 20\% de datos faltantes, sin embargo, la imputación por media
+se vuelve consistentemente más robusta en F1-score. \textcite{vanbuuren2018}
+documenta precisamente esta dinámica: bajo MCAR con clasificadores lineales,
+la media es el estimador óptimo en esperanza, y su robustez relativa
+crece a medida que la reducción del espacio de atributos observados
+perjudica la calidad de los vecindarios que construye KNN.
+
+\subsection{Implicancias prácticas}
+
+Los resultados apuntan a tres conclusiones de uso directo en el diseño de
+\textit{pipelines} con datos incompletos:
+
+\begin{enumerate}
+    \item \textbf{Datos escasamente incompletos (5\%--10\%):} KNN puede
+          rendir ligeramente mejor que la imputación por media, y ese
+          margen puede justificar el mayor costo computacional en
+          aplicaciones donde cada décima de F1 importa.
+
+    \item \textbf{Datos con incompletitud moderada o alta (20\%--50\%):}
+          la imputación por media ofrece resultados equivalentes o
+          superiores con una fracción del tiempo de cómputo. Bajo MCAR
+          y con un clasificador lineal, añadir complejidad al paso de
+          imputación no se traduce en mejora del rendimiento final.
+
+    \item \textbf{El cuello de botella no es la imputación:} la diferencia
+          de F1-score entre el mejor escenario (0.4897 con KNN al 5\%) y
+          el peor (0.4333 con KNN al 50\%) apenas alcanza 0.056. El límite
+          real de rendimiento está impuesto por la separabilidad del
+          \textit{dataset}, no por el método de imputación elegido.
+\end{enumerate}
+
+\subsection{Contraste con la hipótesis original}
+
+La pregunta inicial de la investigación —si KNN produce mejor rendimiento
+que la imputación por media— no obtiene una respuesta afirmativa general.
+KNN gana en los dos escenarios de menor incompletitud, pierde en tres de
+los cuatro restantes y empata con la media en ninguno. Las diferencias,
+además, son reducidas: en la mayoría de escenarios no superan 0.02 puntos
+ni en Accuracy ni en F1-score.
+
+Esto no descalifica a KNN como método de imputación; lo que sí queda en
+evidencia es que su ventaja sobre la media depende del porcentaje de
+datos ausentes, de la estructura de correlación del \textit{dataset} y
+del tipo de clasificador empleado. Al replantear la pregunta de
+investigación hacia el efecto del porcentaje de incompletitud, el trabajo
+captura esa condicionalidad, algo que una comparación de punto único al
+10\% habría pasado por alto.
+
+\section{Limitaciones y trabajo futuro}
+
+Cuatro aspectos limitan el alcance de las conclusiones y abren líneas de
+continuación directas:
+
+\begin{itemize}
+    \item Los experimentos emplean una única semilla (\texttt{SEED = 42}).
+          Repetir el diseño con varias semillas y calcular intervalos de
+          confianza por \textit{bootstrap} permitiría determinar si las
+          diferencias observadas entre métodos son estadísticamente
+          significativas o atribuibles a la variabilidad del muestreo
+          aleatorio.
+
+    \item El uso exclusivo de Regresión Logística restringe la
+          generalización. Clasificadores no lineales como Random Forest
+          o XGBoost pueden explotar mejor la información recuperada por
+          KNN, especialmente a bajos porcentajes de incompletitud, y
+          podrían cambiar las conclusiones sobre qué método es preferible.
+
+    \item El análisis cubre únicamente el mecanismo MCAR. Extenderlo a
+          MAR y MNAR —mecanismos más frecuentes en datos reales— ampliaría
+          tanto la validez externa del experimento como su relevancia
+          práctica.
+
+    \item Incorporar métodos de imputación adicionales (regresión lineal,
+          MICE, \textit{missForest}) daría más contexto a los resultados
+          y ubicaría a KNN y a la media dentro de un espectro más
+          representativo de las opciones disponibles.
+\end{itemize}
