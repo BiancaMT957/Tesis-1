@@ -3,16 +3,16 @@
 \section{Contexto y motivación}
 
 El aprendizaje automático (\textit{Machine Learning}) ha experimentado un
-notable desarrollo en las últimas décadas, consolidándose como una herramienta
-fundamental para la resolución de problemas complejos en ámbitos como la
-medicina, las finanzas y la ingeniería \parencite{bishop2006}. No obstante,
-una de las limitaciones recurrentes en la aplicación de estas técnicas es la
+notable desarrollo en los últimos años, consolidándose como una herramienta
+fundamental para la resolución de problemas complejos en campos como la
+medicina, las finanzas y la ingeniería \parencite{bishop2006}. Pero,
+una de las limitaciones comunes en la aplicación de estas técnicas es la
 incompletitud de los datos del mundo real \parencite{little2019}.
 
-Los valores faltantes pueden originarse por diversas causas: fallos en
+Los valores faltantes pueden deberse a muchas causas: fallos en
 sensores o dispositivos de medición, errores humanos durante la recolección,
 o la pérdida de información en el proceso de transmisión. Su presencia
-representa un obstáculo crítico, dado que la mayoría de los algoritmos de
+representa un obstáculo crítico, porque la mayoría de los algoritmos de
 aprendizaje automático requieren conjuntos de datos completos para su
 funcionamiento. La etapa de preprocesamiento destinada a estimar y reemplazar
 estos valores ausentes se denomina imputación \parencite{garcia2017}.
@@ -20,20 +20,20 @@ estos valores ausentes se denomina imputación \parencite{garcia2017}.
 La elección del método de imputación tiene implicaciones directas sobre la
 calidad de los datos procesados y, en consecuencia, sobre el rendimiento del
 modelo entrenado. Métodos simples, como la imputación por media aritmética,
-presentan ventajas en términos de eficiencia computacional, pero tienden a
+tienen ventajas en términos de eficiencia computacional, pero tienden a
 reducir la varianza de los atributos y a distorsionar las correlaciones entre
 variables. Métodos basados en similitud, como la imputación por
 \textit{K-Nearest Neighbors} (KNN), preservan en mayor medida la estructura
-estadística del conjunto de datos, aunque a un costo computacional más
-elevado \parencite{troyanskaya2001}.
+estadística del conjunto de datos, pero a un costo computacional más
+alto \parencite{troyanskaya2001}.
 
 \section{Problema de investigación}
 
 A pesar de que la imputación de datos faltantes es una tarea fundamental
-en el preprocesamiento de cualquier \textit{pipeline} de ciencia de datos, existe
+en el preprocesamiento de cualquier \textit{pipeline} de ciencia de datos, hay
 escasa evidencia empírica que evalúe de forma sistemática el impacto que
 tiene la elección del método de imputación sobre el rendimiento final del
-modelo de clasificación \parencite{salgado2016}. La mayoría de los estudios
+modelo de clasificación \parencite{salgado2016}. Muchos de los estudios
 existentes analizan los métodos de imputación de manera aislada, sin evaluar
 el impacto integral de dicha elección sobre el rendimiento del clasificador
 en el \textit{pipeline} completo.
@@ -85,16 +85,14 @@ mejor rendimiento en el modelo de clasificación en comparación con la
 imputación por media. Esto se fundamenta en que KNN estima los valores
 faltantes considerando la similitud entre instancias del \textit{dataset}, lo que
 permite preservar en mayor medida la estructura estadística y las
-correlaciones originales entre variables, proporcionando así información
-de mayor calidad al clasificador \parencite{troyanskaya2001}.
+correlaciones originales entre variables, otorgando así información
+de mejor calidad al clasificador \parencite{troyanskaya2001}.
 
 \section{Alcance y limitaciones}
 
-El presente trabajo se limita a la comparación de dos métodos de imputación
-—media y KNN— aplicados sobre un único \textit{dataset} y evaluados mediante un
-único modelo de clasificación base (Regresión Logística). No se aborda la
-optimización de hiperparámetros ni la comparación entre múltiples
-clasificadores, aspectos que quedan propuestos como líneas de trabajo futuro.
+Este trabajo se limita a la comparación de dos métodos de imputación
+—media y KNN— aplicados sobre un  \textit{dataset} y evaluados mediante un único modelo de clasificación base (Regresión Logística). 
+No se realizan la optimización de hiperparámetros ni la comparación entre múltiples clasificadores, aspectos que quedan propuestos como líneas de trabajo futuro.
 
 Asimismo, el experimento considera exclusivamente el mecanismo de ausencia
 MCAR (\textit{Missing Completely At Random}), que asume que la probabilidad
