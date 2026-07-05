@@ -1,0 +1,39 @@
+\chapter{conclusiones}
+
+\section{Conclusiones}
+
+A partir de los experimentos realizados sobre el \textit{Water Potability Dataset}, se comparó el desempeño de la imputación por media y la imputación basada en K-Nearest Neighbors (KNN) para el tratamiento de datos faltantes bajo el mecanismo MCAR. Los resultados permitieron obtener las siguientes conclusiones:
+
+\begin{enumerate}
+
+\item Se comprobó que el método de imputación influye en el desempeño del modelo de clasificación; sin embargo, dicho efecto depende del porcentaje de datos faltantes presente en el conjunto de datos. No existe un método que sea superior en todos los escenarios evaluados.
+
+\item La imputación basada en KNN obtuvo mejores resultados en los escenarios con menor porcentaje de datos faltantes (5\,\% y 10\,\%), logrando valores ligeramente superiores de Accuracy y F1-score respecto a la imputación por media. Esto sugiere que, cuando la información disponible es suficiente para construir vecindarios representativos, la utilización de relaciones de similitud entre instancias puede mejorar la estimación de los valores faltantes.
+
+\item A partir del 20\,\% de datos faltantes, la imputación por media mostró un comportamiento igual o superior al método KNN en la mayoría de los experimentos realizados. Bajo las condiciones evaluadas, la simplicidad del método tradicional resultó suficiente para mantener un rendimiento competitivo sin incurrir en el mayor costo computacional asociado a KNN.
+
+\item Los resultados obtenidos indican que la elección del método de imputación debe considerar las características del problema, el porcentaje de datos faltantes y el modelo de aprendizaje automático empleado. En consecuencia, no es recomendable asumir que un único método de imputación será el más adecuado para todos los conjuntos de datos o escenarios experimentales.
+
+\item La metodología desarrollada permitió construir un pipeline reproducible para introducir datos faltantes bajo el mecanismo MCAR, aplicar diferentes técnicas de imputación y evaluar objetivamente su impacto sobre el desempeño de un modelo de clasificación supervisada. Este pipeline puede servir como base para investigaciones futuras relacionadas con el tratamiento de datos incompletos.
+
+\item Finalmente, esta investigación aporta evidencia experimental sobre el comportamiento comparativo de dos métodos ampliamente utilizados de imputación. Aunque la propuesta basada en KNN presentó ventajas en escenarios con baja incompletitud, los resultados muestran que dichas ventajas no se mantienen cuando aumenta la proporción de datos faltantes, por lo que la selección del método debe realizarse de acuerdo con el contexto específico de aplicación.
+
+\end{enumerate}
+
+\section{Trabajos futuros}
+
+Como continuación de esta investigación se proponen las siguientes líneas de trabajo:
+
+\begin{enumerate}
+
+\item Evaluar el comportamiento de ambos métodos bajo los mecanismos MAR (Missing At Random) y MNAR (Missing Not At Random), los cuales representan escenarios más frecuentes en aplicaciones reales.
+
+\item Comparar la imputación por media y KNN con técnicas más avanzadas como MICE, MissForest, SoftImpute o métodos basados en aprendizaje profundo.
+
+\item Analizar el impacto de la imputación utilizando diferentes modelos de clasificación, tales como Random Forest, XGBoost, Support Vector Machines y Redes Neuronales.
+
+\item Repetir los experimentos utilizando múltiples semillas aleatorias e incorporar pruebas estadísticas para determinar si las diferencias observadas entre métodos son estadísticamente significativas.
+
+\item Validar la metodología propuesta sobre otros conjuntos de datos pertenecientes a distintos dominios de aplicación, con el objetivo de analizar la capacidad de generalización de los resultados obtenidos.
+
+\end{enumerate}
