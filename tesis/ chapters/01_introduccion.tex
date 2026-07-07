@@ -29,7 +29,7 @@ alto \parencite{troyanskaya2001}.
 
 \section{Problema de investigación}
 
-A pesar de que la imputación por media continúa siendo uno de los métodos más utilizados debido a su simplicidad y bajo costo computacional, diversos estudios señalan que puede alterar la distribución de los datos y afectar el desempeño de los modelos de aprendizaje automático \textit{pipeline}. En contraste, la imputación basada en KNN considera la similitud entre instancias y podría preservar mejor la estructura de los datos \parencite{salgado2016}. Sin embargo, aún existe evidencia limitada sobre el impacto comparativo de ambos métodos en tareas de clasificación de la potabilidad del agua bajo diferentes porcentajes de datos faltantes \textit{pipeline}.
+A pesar de que la imputación por media continúa siendo uno de los métodos más utilizados debido a su simplicidad y bajo costo computacional, diversos estudios señalan que puede alterar la distribución de los datos y afectar el desempeño de los modelos de aprendizaje automático . En contraste, la imputación basada en KNN considera la similitud entre instancias y podría preservar mejor la estructura de los datos \parencite{salgado2016}. Sin embargo, aún existe evidencia limitada sobre el impacto comparativo de ambos métodos en tareas de clasificación de la potabilidad del agua bajo diferentes porcentajes de datos faltantes. 
 
 
 
@@ -68,7 +68,11 @@ Proponer el uso de la imputación basada en KNN como alternativa al método trad
 \section{Hipótesis}
 
 Se plantea la hipótesis de que la técnica de imputación basada en KNN propuesta en este trabajo mejora el rendimiento del modelo de clasificación respecto a la imputación tradicional por media bajo determinados escenarios de datos faltantes.
-\parencite{troyanskaya2001}.
+
+\begin{itemize}
+    \item H1: El rendimiento de ambos métodos de imputación se degrada progresivamente a medida que aumenta el porcentaje de datos faltantes.
+    \item H2: La imputación KNN produce mejor rendimiento que la imputación por media en el clasificador de Regresión Logística.
+\end{itemize}
 
 \section{Alcance y limitaciones}
 
@@ -82,6 +86,8 @@ de que un valor sea faltante es independiente de cualquier variable observada
 o no observada \parencite{little2019}. Los mecanismos MAR (\textit{Missing
 At Random}) y MNAR (\textit{Missing Not At Random}), que representan
 escenarios de mayor complejidad, quedan fuera del alcance de este estudio.
+
+
 
 
 
