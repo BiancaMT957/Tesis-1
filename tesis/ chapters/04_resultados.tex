@@ -1,4 +1,3 @@
-
 \chapter{Resultados y Discusión}
 
 \section{Tabla consolidada de resultados}
@@ -8,7 +7,7 @@ imputación— producen los resultados recogidos en la
 Tabla~\ref{tab:resultados_mcar}. Cada fila corresponde a un nivel de
 incompletitud distinto; los valores reportados son Accuracy y F1-score
 medidos sobre las 655 instancias del conjunto de prueba con el clasificador
-de Regresión Logística (\texttt{class\_weight='balanced'}, \texttt{SEED = 42}).
+de Regresión Logística (\texttt{class\_weight=‘balanced'}, \texttt{SEED = 42}).
 
 \begin{table}[H]
 \centering
@@ -31,7 +30,9 @@ de Regresión Logística (\texttt{class\_weight='balanced'}, \texttt{SEED = 42})
 40  & 0.5244 & \textbf{0.5366} & \textbf{0.4800} & 0.4704 \\
 50  & \textbf{0.5137} & 0.5015 & \textbf{0.4491} & 0.4333 \\
 \bottomrule
-\multicolumn{5}{l}{\small En negrita: método con mayor valor en cada escenario.}
+\multicolumn{5}{l}{\small Tabla 4.1: Comparación de Accuracy y F1-score entre la
+imputación por media y la imputación KNN, según el porcentaje de datos
+faltantes introducidos bajo el mecanismo MCAR.}
 \end{tabular}
 \end{table}
 
@@ -76,9 +77,9 @@ disponibles para construir vecindarios resulta demasiado reducido, y KNN
 pierde la ventaja que la estructura local del \textit{dataset} podría
 haberle otorgado en condiciones de mayor completitud.
 
-\begin{figure}[H]
+\begin{figure}[!htbp]
 \centering
-\includegraphics[width=0.95\textwidth]{chapters/img/mcar_diferencia_metodos.png}
+\includegraphics[width=0.88\textwidth]{chapters/img/mcar_diferencia_metodos.png}
 \caption{Diferencia en Accuracy (izquierda) y F1-score (derecha) entre
          KNN e imputación por media ($\Delta = \text{KNN} - \text{Media}$)
          por porcentaje de datos faltantes. Barras en rojo indican
